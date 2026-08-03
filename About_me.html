@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>About Anurodh</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--bg: #eff6ff;
+			--bg-alt: #e0f2fe;
+			--surface: rgba(255, 255, 255, 0.82);
+			--surface-strong: #ffffff;
+			--text: #102033;
+			--muted: #4f647d;
+			--brand: #1d4ed8;
+			--brand-deep: #0f3f9a;
+			--accent: #38bdf8;
+			--accent-soft: #93c5fd;
+			--line: rgba(16, 32, 51, 0.12);
+			--shadow: 0 20px 50px rgba(16, 32, 51, 0.08);
+			--radius-xl: 28px;
+			--radius-lg: 22px;
+			--radius-md: 16px;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Inter", sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at top left, rgba(29, 78, 216, 0.14), transparent 30%),
+				radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 28%),
+				linear-gradient(180deg, #ffffff 0%, var(--bg) 42%, #dff0ff 100%);
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+		}
+
+		.page {
+			width: min(1180px, calc(100% - 32px));
+			margin: 0 auto;
+			padding: 24px 0 56px;
+		}
+
+		.topbar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			padding: 14px 18px;
+			background: rgba(255, 255, 255, 0.72);
+			backdrop-filter: blur(16px);
+			border: 1px solid var(--line);
+			border-radius: 999px;
+			box-shadow: 0 10px 30px rgba(16, 32, 51, 0.05);
+			position: sticky;
+			top: 16px;
+			z-index: 10;
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			font-weight: 800;
+			letter-spacing: 0.02em;
+		}
+
+		.brand-mark {
+			width: 42px;
+			height: 42px;
+			border-radius: 14px;
+			display: grid;
+			place-items: center;
+			color: white;
+			font-weight: 800;
+			background: linear-gradient(135deg, var(--brand), var(--accent));
+			box-shadow: 0 10px 18px rgba(29, 78, 216, 0.25);
+		}
+
+		.nav {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 14px;
+			color: var(--muted);
+			font-size: 0.95rem;
+		}
+
+		.nav a {
+			padding: 8px 12px;
+			border-radius: 999px;
+			transition: background 0.2s ease, color 0.2s ease;
+		}
+
+		.nav a:hover {
+			background: rgba(29, 78, 216, 0.08);
+			color: var(--brand-deep);
+		}
+
+		.hero {
+			display: grid;
+			grid-template-columns: 1.25fr 0.95fr;
+			gap: 24px;
+			align-items: stretch;
+			margin-top: 26px;
+		}
+
+		.hero-copy,
+		.panel,
+		.section-card {
+			background: var(--surface);
+			backdrop-filter: blur(18px);
+			border: 1px solid var(--line);
+			box-shadow: var(--shadow);
+		}
+
+		.hero-copy {
+			border-radius: var(--radius-xl);
+			padding: 38px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.hero-copy::after {
+			content: "";
+			position: absolute;
+			right: -80px;
+			top: -80px;
+			width: 240px;
+			height: 240px;
+			background: radial-gradient(circle, rgba(56, 189, 248, 0.2), transparent 68%);
+			pointer-events: none;
+		}
+
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 14px;
+			border-radius: 999px;
+			background: rgba(29, 78, 216, 0.09);
+			color: var(--brand-deep);
+			font-size: 0.88rem;
+			font-weight: 600;
+			margin-bottom: 18px;
+		}
+
+		.eyebrow-dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: var(--accent);
+			box-shadow: 0 0 0 6px rgba(56, 189, 248, 0.14);
+		}
+
+		h1 {
+			margin: 0;
+			font-size: clamp(2.6rem, 5vw, 5rem);
+			line-height: 0.96;
+			letter-spacing: -0.05em;
+		}
+
+		.hero p {
+			margin: 18px 0 0;
+			max-width: 60ch;
+			font-size: 1.05rem;
+			line-height: 1.75;
+			color: var(--muted);
+		}
+
+		.hero-actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+			margin-top: 28px;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			padding: 14px 20px;
+			border-radius: 999px;
+			font-weight: 700;
+			transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+		}
+
+		.btn:hover {
+			transform: translateY(-1px);
+		}
+
+		.btn-primary {
+			color: white;
+			background: linear-gradient(135deg, var(--brand), var(--accent));
+			box-shadow: 0 14px 30px rgba(29, 78, 216, 0.24);
+		}
+
+		.btn-secondary {
+			color: var(--brand-deep);
+			background: rgba(255, 255, 255, 0.8);
+			border: 1px solid rgba(29, 78, 216, 0.16);
+		}
+
+		.stats {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 12px;
+			margin-top: 30px;
+		}
+
+		.stat {
+			padding: 16px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.66);
+			border: 1px solid rgba(16, 32, 51, 0.08);
+		}
+
+		.stat strong {
+			display: block;
+			font-size: 1.35rem;
+			letter-spacing: -0.03em;
+		}
+
+		.stat span {
+			display: block;
+			margin-top: 6px;
+			color: var(--muted);
+			font-size: 0.92rem;
+			line-height: 1.45;
+		}
+
+		.panel {
+			border-radius: var(--radius-xl);
+			padding: 26px;
+			display: grid;
+			gap: 16px;
+			align-content: start;
+		}
+
+		.profile-card {
+			background: linear-gradient(180deg, #ffffff, #f7fafc);
+			border: 1px solid rgba(16, 32, 51, 0.08);
+			border-radius: 24px;
+			padding: 24px;
+		}
+
+		.profile-label {
+			color: var(--brand);
+			font-size: 0.82rem;
+			text-transform: uppercase;
+			letter-spacing: 0.16em;
+			font-weight: 800;
+		}
+
+		.profile-name {
+			margin: 10px 0 6px;
+			font-size: 2rem;
+			letter-spacing: -0.04em;
+		}
+
+		.profile-role {
+			margin: 0;
+			color: var(--muted);
+			line-height: 1.6;
+		}
+
+		.tag-list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 18px;
+		}
+
+		.tag {
+			padding: 9px 12px;
+			border-radius: 999px;
+			background: rgba(29, 78, 216, 0.08);
+			color: var(--brand-deep);
+			font-size: 0.9rem;
+			font-weight: 600;
+		}
+
+		.signal-box {
+			padding: 18px 20px;
+			border-radius: 20px;
+			background: linear-gradient(135deg, rgba(29, 78, 216, 0.12), rgba(56, 189, 248, 0.12));
+			border: 1px solid rgba(16, 32, 51, 0.08);
+		}
+
+		.signal-box h3 {
+			margin: 0 0 10px;
+			font-size: 1rem;
+		}
+
+		.signal-box p {
+			margin: 0;
+			color: var(--muted);
+			line-height: 1.7;
+			font-size: 0.96rem;
+		}
+
+		.grid {
+			display: grid;
+			gap: 18px;
+			margin-top: 22px;
+			grid-template-columns: repeat(12, 1fr);
+		}
+
+		.section-card {
+			border-radius: var(--radius-lg);
+			padding: 24px;
+			grid-column: span 4;
+		}
+
+		.section-card h2 {
+			margin: 0 0 10px;
+			font-size: 1.28rem;
+			letter-spacing: -0.03em;
+		}
+
+		.section-card p {
+			margin: 0;
+			color: var(--muted);
+			line-height: 1.7;
+		}
+
+		.section-card ul {
+			margin: 18px 0 0;
+			padding: 0;
+			list-style: none;
+			display: grid;
+			gap: 10px;
+		}
+
+		.section-card li {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: var(--text);
+			font-weight: 500;
+		}
+
+		.bullet {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			flex: 0 0 auto;
+			background: linear-gradient(135deg, var(--brand), var(--accent));
+			box-shadow: 0 0 0 5px rgba(29, 78, 216, 0.08);
+		}
+
+		.card-grid {
+			display: grid;
+			grid-template-columns: repeat(12, 1fr);
+			gap: 18px;
+			margin-top: 22px;
+		}
+
+		.info-card {
+			grid-column: span 6;
+			border-radius: var(--radius-lg);
+			padding: 24px;
+			background: var(--surface);
+			backdrop-filter: blur(18px);
+			border: 1px solid var(--line);
+			box-shadow: var(--shadow);
+		}
+
+		.info-card h2,
+		.game-card h2 {
+			margin: 0 0 10px;
+			font-size: 1.28rem;
+			letter-spacing: -0.03em;
+		}
+
+		.info-card p,
+		.game-card p {
+			margin: 0;
+			color: var(--muted);
+			line-height: 1.7;
+		}
+
+		.learning-list {
+			display: grid;
+			gap: 12px;
+			margin-top: 18px;
+		}
+
+		.learning-item {
+			padding: 14px 16px;
+			border-radius: 16px;
+			background: rgba(255, 255, 255, 0.75);
+			border: 1px solid rgba(16, 32, 51, 0.08);
+		}
+
+		.learning-item strong {
+			display: block;
+			margin-bottom: 4px;
+		}
+
+		.learning-item span {
+			color: var(--muted);
+			font-size: 0.95rem;
+			line-height: 1.6;
+		}
+
+		.game-card {
+			grid-column: span 6;
+			border-radius: var(--radius-lg);
+			padding: 24px;
+			background: var(--surface);
+			backdrop-filter: blur(18px);
+			border: 1px solid var(--line);
+			box-shadow: var(--shadow);
+		}
+
+		.game-frame {
+			margin-top: 16px;
+			padding: 16px;
+			border-radius: 22px;
+			background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(224, 242, 254, 0.85));
+			border: 1px solid rgba(29, 78, 216, 0.14);
+		}
+
+		canvas {
+			display: block;
+			width: 100%;
+			height: auto;
+			border-radius: 16px;
+			background: linear-gradient(180deg, #0f172a, #1d4ed8 140%);
+		}
+
+		.game-ui {
+			display: flex;
+			justify-content: space-between;
+			gap: 12px;
+			flex-wrap: wrap;
+			margin-top: 12px;
+			align-items: center;
+		}
+
+		.game-note {
+			font-size: 0.92rem;
+			color: var(--muted);
+		}
+
+		.game-button {
+			border: 0;
+			border-radius: 999px;
+			padding: 10px 14px;
+			font: inherit;
+			font-weight: 700;
+			color: white;
+			background: linear-gradient(135deg, var(--brand), var(--accent));
+			cursor: pointer;
+			box-shadow: 0 10px 20px rgba(29, 78, 216, 0.2);
+		}
+
+		.game-button:hover {
+			transform: translateY(-1px);
+		}
+
+		.game-caption {
+			margin-top: 12px;
+			font-size: 0.92rem;
+			color: var(--muted);
+		}
+
+		.wide {
+			grid-column: span 8;
+		}
+
+		.split {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 18px;
+		}
+
+		.mini-card {
+			padding: 18px;
+			border-radius: 18px;
+			background: rgba(255, 255, 255, 0.7);
+			border: 1px solid rgba(16, 32, 51, 0.08);
+		}
+
+		.mini-card h3 {
+			margin: 0 0 8px;
+			font-size: 1rem;
+		}
+
+		.mini-card p {
+			margin: 0;
+			color: var(--muted);
+			line-height: 1.65;
+		}
+
+		.footer {
+			margin-top: 22px;
+			padding: 20px 6px 0;
+			color: var(--muted);
+			font-size: 0.95rem;
+			text-align: center;
+		}
+
+		@media (max-width: 960px) {
+			.hero {
+				grid-template-columns: 1fr;
+			}
+
+			.section-card,
+			.wide {
+				grid-column: span 12;
+			}
+
+			.info-card,
+			.game-card {
+				grid-column: span 12;
+			}
+		}
+
+		@media (max-width: 720px) {
+			.page {
+				width: min(100% - 20px, 1180px);
+				padding-top: 14px;
+			}
+
+			.topbar {
+				border-radius: 24px;
+				align-items: flex-start;
+				flex-direction: column;
+			}
+
+			.nav {
+				gap: 6px;
+			}
+
+			.hero-copy,
+			.panel,
+			.section-card {
+				padding: 22px;
+			}
+
+			.stats,
+			.split {
+				grid-template-columns: 1fr;
+			}
+
+			.card-grid {
+				grid-template-columns: 1fr;
+			}
+
+			h1 {
+				line-height: 1;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="page">
+		<header class="topbar">
+			<div class="brand">
+				<div class="brand-mark">A</div>
+				<div>
+					<div>Anurodh</div>
+					<small style="color: var(--muted); font-weight: 500;">Personal profile and interests</small>
+				</div>
+			</div>
+			<nav class="nav" aria-label="Primary">
+				<a href="#about">About</a>
+				<a href="#interests">Interests</a>
+				<a href="#hobbies">Hobbies</a>
+				<a href="#favorites">Favorites</a>
+			</nav>
+		</header>
+
+		<section class="hero" id="about">
+			<div class="hero-copy">
+				<div class="eyebrow"><span class="eyebrow-dot"></span> Professional personal website</div>
+				<h1>Anurodh builds, explores, and learns with curiosity.</h1>
+				<p>
+					I enjoy robotics, experimenting with Arduino and ESP32 projects, watching TV, and spending time outdoors.
+					This page presents my interests in a clean, company-style format with a polished and confident visual identity.
+				</p>
+				<div class="hero-actions">
+					<a class="btn btn-primary" href="#interests">View interests</a>
+					<a class="btn btn-secondary" href="#favorites">See favorites</a>
+				</div>
+
+				<div class="stats" aria-label="Key highlights">
+					<div class="stat">
+						<strong>Robotics</strong>
+						<span>Hands-on problem solving, building, and testing ideas.</span>
+					</div>
+					<div class="stat">
+						<strong>Arduino + ESP32</strong>
+						<span>Microcontroller projects with practical, creative outcomes.</span>
+					</div>
+					<div class="stat">
+						<strong>Outdoor balance</strong>
+						<span>Time outside keeps the workflow active and balanced.</span>
+					</div>
+				</div>
+			</div>
+
+			<aside class="panel">
+				<div class="profile-card">
+					<div class="profile-label">Profile</div>
+					<div class="profile-name">Anurodh</div>
+					<p class="profile-role">
+						A curious maker who likes to combine electronics, creativity, and practical learning.
+					</p>
+					<div class="tag-list" aria-label="Quick tags">
+						<span class="tag">Robotics</span>
+						<span class="tag">Arduino</span>
+						<span class="tag">ESP32</span>
+						<span class="tag">TV</span>
+						<span class="tag">Outdoor time</span>
+					</div>
+				</div>
+
+				<div class="signal-box">
+					<h3>What drives me</h3>
+					<p>
+						I like building things that are useful, learning how they work, and improving them step by step.
+					</p>
+				</div>
+			</aside>
+		</section>
+
+		<section class="grid" id="interests">
+			<article class="section-card wide">
+				<h2>Core Interests</h2>
+				<p>
+					My interests mix technical curiosity with everyday enjoyment. I like structured work when I am building,
+					and I also value relaxed time for entertainment and time outside.
+				</p>
+				<div class="split" style="margin-top: 18px;">
+					<div class="mini-card">
+						<h3>Robotics</h3>
+						<p>Designing and exploring machines that move, sense, and respond intelligently.</p>
+					</div>
+					<div class="mini-card">
+						<h3>Watching TV</h3>
+						<p>Relaxing with shows and stories that give a break after a technical project.</p>
+					</div>
+					<div class="mini-card">
+						<h3>Going Outside</h3>
+						<p>Spending time outdoors to stay active, refreshed, and balanced.</p>
+					</div>
+					<div class="mini-card">
+						<h3>Learning by Doing</h3>
+						<p>Turning ideas into real projects through testing, iteration, and curiosity.</p>
+					</div>
+				</div>
+			</article>
+
+			<article class="section-card" id="hobbies">
+				<h2>Hobbies</h2>
+				<p>My hands-on hobbies focus on electronics and maker projects.</p>
+				<ul>
+					<li><span class="bullet"></span> Arduino projects</li>
+					<li><span class="bullet"></span> ESP32 builds</li>
+					<li><span class="bullet"></span> Sensor-based experiments</li>
+					<li><span class="bullet"></span> Prototyping and testing</li>
+				</ul>
+			</article>
+
+			<article class="section-card" id="favorites">
+				<h2>Favorites</h2>
+				<p>These are a couple of the foods I like most.</p>
+				<ul>
+					<li><span class="bullet"></span> Momo</li>
+					<li><span class="bullet"></span> Daalbhat</li>
+				</ul>
+			</article>
+		</section>
+
+		<section class="card-grid" id="learning">
+			<article class="info-card">
+				<h2>What I'm Learning</h2>
+				<p>
+					These are the skills I am building right now so I can create better projects and stronger technical work.
+				</p>
+				<div class="learning-list">
+					<div class="learning-item">
+						<strong>C++</strong>
+						<span>For stronger programming fundamentals, logic, and robotics-style problem solving.</span>
+					</div>
+					<div class="learning-item">
+						<strong>Python</strong>
+						<span>For coding practice, automation, and building a flexible foundation for future projects.</span>
+					</div>
+				</div>
+			</article>
+
+			<article class="info-card">
+				<h2>What I Want to Learn Next</h2>
+				<p>
+					My next goals are focused on web development and more advanced embedded projects.
+				</p>
+				<div class="learning-list">
+					<div class="learning-item">
+						<strong>JavaScript</strong>
+						<span>To build interactive websites, tools, and simple browser-based games.</span>
+					</div>
+					<div class="learning-item">
+						<strong>More ESP32 projects</strong>
+						<span>Especially a robot hand, smart control systems, and connected devices.</span>
+					</div>
+				</div>
+			</article>
+		</section>
+
+		<section class="card-grid" id="games">
+			<article class="game-card">
+				<h2>Paddle Drift</h2>
+				<p>A small pong-style game. Move the left paddle with W and S, or the arrow keys on the right side for the second player.</p>
+				<div class="game-frame">
+					<canvas id="pongCanvas" width="560" height="280" aria-label="Pong style game"></canvas>
+				</div>
+				<div class="game-ui">
+					<div class="game-note">Controls: W/S for left paddle, Up/Down for right paddle.</div>
+					<button class="game-button" id="resetPong" type="button">Reset game</button>
+				</div>
+				<div class="game-caption">A simple, polished mini-game inspired by classic arcade motion.</div>
+			</article>
+
+			<article class="game-card">
+				<h2>Orbit Defender</h2>
+				<p>A space-shooter style game with a cleaner name. Use the arrow keys to move and spacebar to fire.</p>
+				<div class="game-frame">
+					<canvas id="shooterCanvas" width="560" height="280" aria-label="Space shooter game"></canvas>
+				</div>
+				<div class="game-ui">
+					<div class="game-note">Controls: Arrow keys move, spacebar fires.</div>
+					<button class="game-button" id="resetShooter" type="button">Reset game</button>
+				</div>
+				<div class="game-caption">A compact browser game built to fit the same professional visual style.</div>
+			</article>
+		</section>
+
+		<footer class="footer">
+			Designed for Anurodh as a polished personal website with a professional, company-style presentation.
+		</footer>
+	</main>
+
+	<script>
+		(() => {
+			const pongCanvas = document.getElementById('pongCanvas');
+			const shooterCanvas = document.getElementById('shooterCanvas');
+			const resetPongButton = document.getElementById('resetPong');
+			const resetShooterButton = document.getElementById('resetShooter');
+
+			const pongContext = pongCanvas.getContext('2d');
+			const shooterContext = shooterCanvas.getContext('2d');
+
+			const keys = new Set();
+			let lastFrame = performance.now();
+
+			const pong = {
+				leftY: 90,
+				rightY: 90,
+				ballX: 280,
+				ballY: 140,
+				ballVX: 180,
+				ballVY: 120,
+				leftScore: 0,
+				rightScore: 0
+			};
+
+			const shooter = {
+				playerX: 260,
+				playerY: 230,
+				bullets: [],
+				enemies: [],
+				spawnTimer: 0,
+				score: 0,
+				lives: 3,
+				gameOver: false
+			};
+
+			function resetPong() {
+				pong.leftY = 90;
+				pong.rightY = 90;
+				pong.ballX = 280;
+				pong.ballY = 140;
+				pong.ballVX = 180 * (Math.random() > 0.5 ? 1 : -1);
+				pong.ballVY = 120 * (Math.random() > 0.5 ? 1 : -1);
+			}
+
+			function resetShooter() {
+				shooter.playerX = 260;
+				shooter.playerY = 230;
+				shooter.bullets = [];
+				shooter.enemies = [];
+				shooter.spawnTimer = 0;
+				shooter.score = 0;
+				shooter.lives = 3;
+				shooter.gameOver = false;
+			}
+
+			resetPongButton.addEventListener('click', resetPong);
+			resetShooterButton.addEventListener('click', resetShooter);
+
+			window.addEventListener('keydown', (event) => {
+				keys.add(event.key.toLowerCase());
+				if (event.key === ' ' || event.code === 'Space') {
+					event.preventDefault();
+					if (!shooter.gameOver) {
+						shooter.bullets.push({ x: shooter.playerX + 13, y: shooter.playerY, vy: -320 });
+					}
+				}
+			});
+
+			window.addEventListener('keyup', (event) => {
+				keys.delete(event.key.toLowerCase());
+			});
+
+			function updatePong(delta) {
+				const paddleSpeed = 220;
+				if (keys.has('w')) pong.leftY -= paddleSpeed * delta;
+				if (keys.has('s')) pong.leftY += paddleSpeed * delta;
+				if (keys.has('arrowup')) pong.rightY -= paddleSpeed * delta;
+				if (keys.has('arrowdown')) pong.rightY += paddleSpeed * delta;
+
+				pong.leftY = Math.max(0, Math.min(200, pong.leftY));
+				pong.rightY = Math.max(0, Math.min(200, pong.rightY));
+
+				pong.ballX += pong.ballVX * delta;
+				pong.ballY += pong.ballVY * delta;
+
+				if (pong.ballY <= 8 || pong.ballY >= 272) {
+					pong.ballVY *= -1;
+				}
+
+				if (pong.ballX <= 26 && pong.ballY >= pong.leftY && pong.ballY <= pong.leftY + 80) {
+					pong.ballVX = Math.abs(pong.ballVX) + 8;
+					const impact = (pong.ballY - (pong.leftY + 40)) / 40;
+					pong.ballVY = impact * 220;
+				}
+
+				if (pong.ballX >= 534 && pong.ballY >= pong.rightY && pong.ballY <= pong.rightY + 80) {
+					pong.ballVX = -Math.abs(pong.ballVX) - 8;
+					const impact = (pong.ballY - (pong.rightY + 40)) / 40;
+					pong.ballVY = impact * 220;
+				}
+
+				if (pong.ballX < 0) {
+					pong.rightScore += 1;
+					resetPong();
+					pong.ballVX = Math.abs(pong.ballVX);
+				}
+
+				if (pong.ballX > 560) {
+					pong.leftScore += 1;
+					resetPong();
+					pong.ballVX = -Math.abs(pong.ballVX);
+				}
+			}
+
+			function drawPong() {
+				pongContext.clearRect(0, 0, 560, 280);
+				pongContext.fillStyle = 'rgba(255,255,255,0.12)';
+				for (let y = 12; y < 280; y += 24) {
+					pongContext.fillRect(279, y, 2, 14);
+				}
+
+				pongContext.fillStyle = '#ffffff';
+				pongContext.fillRect(18, pong.leftY, 10, 80);
+				pongContext.fillRect(532, pong.rightY, 10, 80);
+
+				pongContext.beginPath();
+				pongContext.arc(pong.ballX, pong.ballY, 8, 0, Math.PI * 2);
+				pongContext.fillStyle = '#e0f2fe';
+				pongContext.fill();
+
+				pongContext.font = '700 18px Inter, sans-serif';
+				pongContext.fillStyle = '#ffffff';
+				pongContext.fillText(String(pong.leftScore).padStart(2, '0'), 206, 30);
+				pongContext.fillText(String(pong.rightScore).padStart(2, '0'), 342, 30);
+			}
+
+			function updateShooter(delta) {
+				if (!shooter.gameOver) {
+					const moveSpeed = 260;
+					if (keys.has('arrowleft')) shooter.playerX -= moveSpeed * delta;
+					if (keys.has('arrowright')) shooter.playerX += moveSpeed * delta;
+					if (keys.has('arrowup')) shooter.playerY -= moveSpeed * delta;
+					if (keys.has('arrowdown')) shooter.playerY += moveSpeed * delta;
+
+					shooter.playerX = Math.max(12, Math.min(535, shooter.playerX));
+					shooter.playerY = Math.max(180, Math.min(252, shooter.playerY));
+
+					shooter.spawnTimer += delta;
+					if (shooter.spawnTimer >= 0.8) {
+						shooter.spawnTimer = 0;
+						shooter.enemies.push({
+							x: 18 + Math.random() * 510,
+							y: -20,
+							vy: 70 + Math.random() * 70,
+							hit: false
+						});
+					}
+				}
+
+				shooter.bullets = shooter.bullets.filter((bullet) => bullet.y > -20);
+				shooter.enemies = shooter.enemies.filter((enemy) => enemy.y < 320 && !enemy.hit);
+
+				for (const bullet of shooter.bullets) {
+					bullet.y += bullet.vy * delta;
+				}
+
+				for (const enemy of shooter.enemies) {
+					enemy.y += enemy.vy * delta;
+					if (!shooter.gameOver && enemy.y > 240) {
+						shooter.lives -= 1;
+						enemy.hit = true;
+						if (shooter.lives <= 0) {
+							shooter.gameOver = true;
+						}
+					}
+				}
+
+				for (const bullet of shooter.bullets) {
+					for (const enemy of shooter.enemies) {
+						const dx = bullet.x - (enemy.x + 14);
+						const dy = bullet.y - (enemy.y + 14);
+						if (dx * dx + dy * dy < 520) {
+							bullet.y = -100;
+							enemy.hit = true;
+							shooter.score += 10;
+						}
+					}
+				}
+			}
+
+			function drawShooter() {
+				shooterContext.clearRect(0, 0, 560, 280);
+
+				const gradient = shooterContext.createLinearGradient(0, 0, 0, 280);
+				gradient.addColorStop(0, 'rgba(15, 23, 42, 0.15)');
+				gradient.addColorStop(1, 'rgba(29, 78, 216, 0.35)');
+				shooterContext.fillStyle = gradient;
+				shooterContext.fillRect(0, 0, 560, 280);
+
+				shooterContext.fillStyle = 'rgba(255,255,255,0.16)';
+				for (let i = 0; i < 36; i += 1) {
+					const x = (i * 67) % 560;
+					const y = (i * 41) % 280;
+					shooterContext.fillRect(x, y, 2, 2);
+				}
+
+				shooterContext.fillStyle = '#e0f2fe';
+				shooterContext.beginPath();
+				shooterContext.moveTo(shooter.playerX, shooter.playerY - 14);
+				shooterContext.lineTo(shooter.playerX - 12, shooter.playerY + 12);
+				shooterContext.lineTo(shooter.playerX + 12, shooter.playerY + 12);
+				shooterContext.closePath();
+				shooterContext.fill();
+
+				for (const bullet of shooter.bullets) {
+					shooterContext.fillStyle = '#ffffff';
+					shooterContext.fillRect(bullet.x, bullet.y, 3, 10);
+				}
+
+				for (const enemy of shooter.enemies) {
+					shooterContext.fillStyle = enemy.hit ? 'rgba(255,255,255,0.2)' : '#93c5fd';
+					shooterContext.fillRect(enemy.x, enemy.y, 28, 28);
+					shooterContext.fillStyle = '#1e3a8a';
+					shooterContext.fillRect(enemy.x + 5, enemy.y + 8, 5, 5);
+					shooterContext.fillRect(enemy.x + 18, enemy.y + 8, 5, 5);
+				}
+
+				shooterContext.fillStyle = '#ffffff';
+				shooterContext.font = '700 16px Inter, sans-serif';
+				shooterContext.fillText(`Score: ${shooter.score}`, 16, 24);
+				shooterContext.fillText(`Lives: ${shooter.lives}`, 16, 46);
+
+				if (shooter.gameOver) {
+					shooterContext.fillStyle = 'rgba(15, 23, 42, 0.72)';
+					shooterContext.fillRect(0, 0, 560, 280);
+					shooterContext.fillStyle = '#ffffff';
+					shooterContext.font = '800 28px Inter, sans-serif';
+					shooterContext.fillText('Mission complete', 185, 128);
+					shooterContext.font = '600 16px Inter, sans-serif';
+					shooterContext.fillText('Press Reset game to try again.', 176, 160);
+				}
+			}
+
+			function animate(now) {
+				const delta = Math.min(0.032, (now - lastFrame) / 1000);
+				lastFrame = now;
+
+				updatePong(delta);
+				updateShooter(delta);
+				drawPong();
+				drawShooter();
+				requestAnimationFrame(animate);
+			}
+
+			resetPong();
+			resetShooter();
+			requestAnimationFrame(animate);
+		})();
+	</script>
+</body>
+</html>
