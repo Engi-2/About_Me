@@ -751,6 +751,32 @@
 				</div>
 				<div class="game-caption">A compact browser game built to fit the same professional visual style.</div>
 			</article>
+
+			<article class="game-card">
+				<h2>Brick Breaker</h2>
+				<p>A retro arcade-style breaker with a paddle and bouncing ball. Use A/D or the left and right arrow keys to stay alive.</p>
+				<div class="game-frame">
+					<canvas id="breakoutCanvas" width="560" height="280" aria-label="Brick breaker game"></canvas>
+				</div>
+				<div class="game-ui">
+					<div class="game-note">Controls: A/D or left/right arrows.</div>
+					<button class="game-button" id="resetBreakout" type="button">Reset game</button>
+				</div>
+				<div class="game-caption">A classic arcade challenge that fits the same modern layout.</div>
+			</article>
+
+			<article class="game-card">
+				<h2>Snake Sprint</h2>
+				<p>Collect food and grow your snake. Arrow keys or W/A/S/D guide the movement through the grid.</p>
+				<div class="game-frame">
+					<canvas id="snakeCanvas" width="560" height="280" aria-label="Snake game"></canvas>
+				</div>
+				<div class="game-ui">
+					<div class="game-note">Controls: Arrow keys or W/A/S/D.</div>
+					<button class="game-button" id="resetSnake" type="button">Reset game</button>
+				</div>
+				<div class="game-caption">A familiar old-school favorite with a polished presentation.</div>
+			</article>
 		</section>
 
 		<footer class="footer">
@@ -762,11 +788,17 @@
 		(() => {
 			const pongCanvas = document.getElementById('pongCanvas');
 			const shooterCanvas = document.getElementById('shooterCanvas');
+			const breakoutCanvas = document.getElementById('breakoutCanvas');
+			const snakeCanvas = document.getElementById('snakeCanvas');
 			const resetPongButton = document.getElementById('resetPong');
 			const resetShooterButton = document.getElementById('resetShooter');
+			const resetBreakoutButton = document.getElementById('resetBreakout');
+			const resetSnakeButton = document.getElementById('resetSnake');
 
 			const pongContext = pongCanvas.getContext('2d');
 			const shooterContext = shooterCanvas.getContext('2d');
+			const breakoutContext = breakoutCanvas.getContext('2d');
+			const snakeContext = snakeCanvas.getContext('2d');
 
 			const keys = new Set();
 			let lastFrame = performance.now();
@@ -793,6 +825,28 @@
 				gameOver: false
 			};
 
+			const breakout = {
+				paddleX: 220,
+				ballX: 280,
+				ballY: 160,
+				ballVX: 220,
+				ballVY: -180,
+				bricks: [],
+				score: 0,
+				lives: 3,
+				gameOver: false
+			};
+
+			const snake = {
+				cells: [],
+				dir: { x: 1, y: 0 },
+				nextDir: { x: 1, y: 0 },
+				food: { x: 12, y: 8 },
+				moveTimer: 0,
+				score: 0,
+				gameOver: false
+			};
+
 			function resetPong() {
 				pong.leftY = 90;
 				pong.rightY = 90;
@@ -813,8 +867,49 @@
 				shooter.gameOver = false;
 			}
 
+			function resetBreakout() {
+				breakout.paddleX = 220;
+				breakout.ballX = 280;
+				breakout.ballY = 160;
+				breakout.ballVX = 220 * (Math.random() > 0.5 ? 1 : -1);
+				breakout.ballVY = -180;
+				breakout.score = 0;
+				breakout.lives = 3;
+				breakout.gameOver = false;
+				breakout.bricks = [];
+				for (let row = 0; row < 4; row += 1) {
+					for (let col = 0; col < 8; col += 1) {
+						breakout.bricks.push({ x: 32 + col * 64, y: 26 + row * 24, alive: true });
+					}
+				}
+			}
+
+			function placeFood() {
+				let candidate;
+				do {
+					candidate = { x: Math.floor(Math.random() * 28), y: Math.floor(Math.random() * 14) };
+				} while (snake.cells.some((cell) => cell.x === candidate.x && cell.y === candidate.y));
+				snake.food = candidate;
+			}
+
+			function resetSnake() {
+				snake.cells = [
+					{ x: 10, y: 8 },
+					{ x: 9, y: 8 },
+					{ x: 8, y: 8 }
+				];
+				snake.dir = { x: 1, y: 0 };
+				snake.nextDir = { x: 1, y: 0 };
+				snake.moveTimer = 0;
+				snake.score = 0;
+				snake.gameOver = false;
+				placeFood();
+			}
+
 			resetPongButton.addEventListener('click', resetPong);
 			resetShooterButton.addEventListener('click', resetShooter);
+			resetBreakoutButton.addEventListener('click', resetBreakout);
+			resetSnakeButton.addEventListener('click', resetSnake);
 
 			window.addEventListener('keydown', (event) => {
 				keys.add(event.key.toLowerCase());
@@ -1001,19 +1096,199 @@
 				}
 			}
 
+			function updateBreakout(delta) {
+				if (breakout.gameOver) {
+					return;
+				}
+
+				if (keys.has('arrowleft') || keys.has('a')) breakout.paddleX -= 260 * delta;
+				if (keys.has('arrowright') || keys.has('d')) breakout.paddleX += 260 * delta;
+				breakout.paddleX = Math.max(0, Math.min(480, breakout.paddleX));
+
+				breakout.ballX += breakout.ballVX * delta;
+				breakout.ballY += breakout.ballVY * delta;
+
+				if (breakout.ballX <= 8 || breakout.ballX >= 552) {
+					breakout.ballVX *= -1;
+				}
+
+				if (breakout.ballY <= 8) {
+					breakout.ballVY = Math.abs(breakout.ballVY);
+				}
+
+				if (breakout.ballY >= 248 && breakout.ballY <= 262 && breakout.ballX >= breakout.paddleX && breakout.ballX <= breakout.paddleX + 80) {
+					breakout.ballY = 246;
+					breakout.ballVY = -Math.abs(breakout.ballVY);
+					const impact = ((breakout.ballX - (breakout.paddleX + 40)) / 40);
+					breakout.ballVX = impact * 240;
+				}
+
+				if (breakout.ballY > 280) {
+					breakout.lives -= 1;
+					if (breakout.lives <= 0) {
+						breakout.gameOver = true;
+					} else {
+						breakout.ballX = 280;
+						breakout.ballY = 160;
+						breakout.ballVX = 220 * (Math.random() > 0.5 ? 1 : -1);
+						breakout.ballVY = -180;
+					}
+				}
+
+				for (const brick of breakout.bricks) {
+					if (!brick.alive) continue;
+					if (breakout.ballX >= brick.x && breakout.ballX <= brick.x + 48 && breakout.ballY >= brick.y && breakout.ballY <= brick.y + 16) {
+						brick.alive = false;
+						breakout.score += 10;
+						breakout.ballVY *= -1;
+						break;
+					}
+				}
+
+				if (breakout.bricks.every((brick) => !brick.alive)) {
+					breakout.gameOver = true;
+				}
+			}
+
+			function drawBreakout() {
+				breakoutContext.clearRect(0, 0, 560, 280);
+				const gradient = breakoutContext.createLinearGradient(0, 0, 0, 280);
+				gradient.addColorStop(0, 'rgba(15, 23, 42, 0.15)');
+				gradient.addColorStop(1, 'rgba(56, 189, 248, 0.25)');
+				breakoutContext.fillStyle = gradient;
+				breakoutContext.fillRect(0, 0, 560, 280);
+
+				for (const brick of breakout.bricks) {
+					if (!brick.alive) continue;
+					breakoutContext.fillStyle = '#ffffff';
+					breakoutContext.fillRect(brick.x, brick.y, 48, 16);
+				}
+
+				breakoutContext.fillStyle = '#e0f2fe';
+				breakoutContext.fillRect(breakout.paddleX, 246, 80, 10);
+				breakoutContext.beginPath();
+				breakoutContext.arc(breakout.ballX, breakout.ballY, 8, 0, Math.PI * 2);
+				breakoutContext.fill();
+
+				breakoutContext.fillStyle = '#ffffff';
+				breakoutContext.font = '700 16px Inter, sans-serif';
+				breakoutContext.fillText(`Score: ${breakout.score}`, 16, 24);
+				breakoutContext.fillText(`Lives: ${breakout.lives}`, 16, 46);
+
+				if (breakout.gameOver) {
+					breakoutContext.fillStyle = 'rgba(15, 23, 42, 0.72)';
+					breakoutContext.fillRect(0, 0, 560, 280);
+					breakoutContext.fillStyle = '#ffffff';
+					breakoutContext.font = '800 24px Inter, sans-serif';
+					breakoutContext.fillText('Brick cleared', 190, 130);
+					breakoutContext.font = '600 15px Inter, sans-serif';
+					breakoutContext.fillText('Press Reset game to play again.', 154, 160);
+				}
+			}
+
+			function updateSnake(delta) {
+				if (snake.gameOver) return;
+
+				snake.moveTimer += delta;
+				if (snake.moveTimer < 0.12) return;
+				snake.moveTimer = 0;
+
+				if (keys.has('arrowup') || keys.has('w')) snake.nextDir = { x: 0, y: -1 };
+				if (keys.has('arrowdown') || keys.has('s')) snake.nextDir = { x: 0, y: 1 };
+				if (keys.has('arrowleft') || keys.has('a')) snake.nextDir = { x: -1, y: 0 };
+				if (keys.has('arrowright') || keys.has('d')) snake.nextDir = { x: 1, y: 0 };
+
+				if (snake.nextDir.x === -snake.dir.x && snake.nextDir.y === -snake.dir.y) {
+					snake.nextDir = snake.dir;
+				}
+
+				snake.dir = snake.nextDir;
+				const head = snake.cells[0];
+				const nextHead = { x: head.x + snake.dir.x, y: head.y + snake.dir.y };
+
+				if (
+					nextHead.x < 0 || nextHead.x >= 28 ||
+					nextHead.y < 0 || nextHead.y >= 14 ||
+					snake.cells.some((cell) => cell.x === nextHead.x && cell.y === nextHead.y)
+				) {
+					snake.gameOver = true;
+					return;
+				}
+
+				snake.cells.unshift(nextHead);
+				if (nextHead.x === snake.food.x && nextHead.y === snake.food.y) {
+					snake.score += 10;
+					placeFood();
+				} else {
+					snake.cells.pop();
+				}
+			}
+
+			function drawSnake() {
+				snakeContext.clearRect(0, 0, 560, 280);
+				const gradient = snakeContext.createLinearGradient(0, 0, 0, 280);
+				gradient.addColorStop(0, 'rgba(15, 23, 42, 0.16)');
+				gradient.addColorStop(1, 'rgba(29, 78, 216, 0.28)');
+				snakeContext.fillStyle = gradient;
+				snakeContext.fillRect(0, 0, 560, 280);
+
+				snakeContext.strokeStyle = 'rgba(255,255,255,0.12)';
+				snakeContext.lineWidth = 1;
+				for (let x = 0; x <= 560; x += 20) {
+					snakeContext.beginPath();
+					snakeContext.moveTo(x, 0);
+					snakeContext.lineTo(x, 280);
+					snakeContext.stroke();
+				}
+				for (let y = 0; y <= 280; y += 20) {
+					snakeContext.beginPath();
+					snakeContext.moveTo(0, y);
+					snakeContext.lineTo(560, y);
+					snakeContext.stroke();
+				}
+
+				snakeContext.fillStyle = '#f59e0b';
+				snakeContext.fillRect(snake.food.x * 20 + 2, snake.food.y * 20 + 2, 16, 16);
+
+				snake.cells.forEach((cell, index) => {
+					snakeContext.fillStyle = index === 0 ? '#e0f2fe' : '#93c5fd';
+					snakeContext.fillRect(cell.x * 20 + 1, cell.y * 20 + 1, 18, 18);
+				});
+
+				snakeContext.fillStyle = '#ffffff';
+				snakeContext.font = '700 16px Inter, sans-serif';
+				snakeContext.fillText(`Score: ${snake.score}`, 16, 24);
+
+				if (snake.gameOver) {
+					snakeContext.fillStyle = 'rgba(15, 23, 42, 0.72)';
+					snakeContext.fillRect(0, 0, 560, 280);
+					snakeContext.fillStyle = '#ffffff';
+					snakeContext.font = '800 24px Inter, sans-serif';
+					snakeContext.fillText('Game over', 210, 126);
+					snakeContext.font = '600 15px Inter, sans-serif';
+					snakeContext.fillText('Press Reset game to try again.', 150, 156);
+				}
+			}
+
 			function animate(now) {
 				const delta = Math.min(0.032, (now - lastFrame) / 1000);
 				lastFrame = now;
 
 				updatePong(delta);
 				updateShooter(delta);
+				updateBreakout(delta);
+				updateSnake(delta);
 				drawPong();
 				drawShooter();
+				drawBreakout();
+				drawSnake();
 				requestAnimationFrame(animate);
 			}
 
 			resetPong();
 			resetShooter();
+			resetBreakout();
+			resetSnake();
 			requestAnimationFrame(animate);
 		})();
 	</script>
