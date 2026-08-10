@@ -505,38 +505,58 @@
 			transform: translateY(-1px);
 		}
 
-		#games:fullscreen {
+		body.games-immersive-open {
+			overflow: hidden;
+		}
+
+		#games.games-immersive {
+			position: fixed;
+			inset: 0;
+			z-index: 1200;
 			width: 100vw;
 			height: 100vh;
 			margin: 0;
 			padding: 24px;
 			overflow-y: auto;
-			background: linear-gradient(180deg, #ffffff 0%, #eff6ff 42%, #dff0ff 100%);
+			background:
+				radial-gradient(circle at top left, rgba(29, 78, 216, 0.14), transparent 32%),
+				radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.16), transparent 26%),
+				linear-gradient(180deg, #ffffff 0%, #eff6ff 42%, #dff0ff 100%);
 			align-content: start;
-			grid-template-columns: repeat(12, 1fr);
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			border-radius: 0;
+			box-shadow: none;
 		}
 
-		#games:fullscreen .games-toolbar {
+		#games.games-immersive .games-toolbar {
 			position: sticky;
 			top: 0;
 			z-index: 1;
-			padding: 14px 16px;
-			margin-bottom: 4px;
-			border-radius: 20px;
+			padding: 14px 18px;
+			margin-bottom: 10px;
+			border-radius: 22px;
 			background: rgba(255, 255, 255, 0.92);
 			backdrop-filter: blur(16px);
 			border: 1px solid var(--line);
 			box-shadow: var(--shadow);
 		}
 
-		#games:fullscreen .game-card {
-			grid-column: 1 / -1;
-			width: min(100%, 1100px);
+		#games.games-immersive .game-card {
+			grid-column: span 6;
+			min-height: 420px;
+			width: min(100%, 1120px);
 			justify-self: center;
+			padding: 28px;
 		}
 
-		#games:fullscreen .game-frame canvas {
+		#games.games-immersive .game-frame {
+			padding: 18px;
+		}
+
+		#games.games-immersive .game-frame canvas {
 			width: 100%;
+			max-height: 320px;
+			object-fit: cover;
 		}
 
 		.game-caption {
@@ -882,6 +902,7 @@
 			const resetBreakoutButton = document.getElementById('resetBreakout');
 			const resetSnakeButton = document.getElementById('resetSnake');
 			const toggleGamesFullscreenButton = document.getElementById('toggleGamesFullscreen');
+			const gamesSection = document.getElementById('games');
 
 			const pongContext = pongCanvas.getContext('2d');
 			const shooterContext = shooterCanvas.getContext('2d');
@@ -1000,27 +1021,26 @@
 			resetSnakeButton.addEventListener('click', resetSnake);
 
 			function updateFullscreenLabel() {
-				toggleGamesFullscreenButton.textContent = document.fullscreenElement === document.getElementById('games')
-					? 'Exit fullscreen'
+				toggleGamesFullscreenButton.textContent = document.body.classList.contains('games-immersive-open')
+					? 'Exit immersive view'
 					: 'Fullscreen games';
 			}
 
-			async function toggleGamesFullscreen() {
-				const gamesSection = document.getElementById('games');
-				try {
-					if (document.fullscreenElement === gamesSection) {
-						await document.exitFullscreen();
-					} else {
-						await gamesSection.requestFullscreen();
-					}
-				} catch (error) {
-					console.warn('Fullscreen mode is not available for the games section.', error);
-				}
+			function toggleGamesFullscreen() {
+				const isOpen = document.body.classList.contains('games-immersive-open');
+				document.body.classList.toggle('games-immersive-open', !isOpen);
+				gamesSection.classList.toggle('games-immersive', !isOpen);
 				updateFullscreenLabel();
 			}
 
 			toggleGamesFullscreenButton.addEventListener('click', toggleGamesFullscreen);
-			document.addEventListener('fullscreenchange', updateFullscreenLabel);
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape' && document.body.classList.contains('games-immersive-open')) {
+					document.body.classList.remove('games-immersive-open');
+					gamesSection.classList.remove('games-immersive');
+					updateFullscreenLabel();
+				}
+			});
 
 			window.addEventListener('keydown', (event) => {
 				keys.add(event.key.toLowerCase());
